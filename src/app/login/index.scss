@@ -1,0 +1,69 @@
+html{
+    height: 100%;
+    body{
+        height: 100%;
+        .bg-login{
+            background-image: url(/assets/background-with-low-poly-lines.jpg);
+            background-size: cover;
+            background-repeat: no-repeat;
+            width: 100%;
+            height: 100%;
+            justify-content: center;
+            display: flex;
+            align-items: center;
+            .container-login{
+                width: 700px;
+                height: 350px;
+                backdrop-filter: blur(20px);
+                border-radius: 30px;
+                display: flex;
+                .center-text-title-login{
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    height: 100%;
+                    width: 49%;
+                }   
+                .line-vertical{
+                    width: 1px;
+                    height: 95%;
+                    margin: auto 0;
+                    background-color: white;
+                }
+                .content-form-login{
+                    width: 49%;
+                    height: 100%;
+                    .center-form-login{
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100%;;
+                    }
+                    .ant-form-item-row{
+                        display: block;
+                        margin: 0 auto;
+                        justify-content: center;
+                    }
+                    .ant-form-item-label{
+                        display: flex;
+                        justify-content: center;
+                        label{
+                            color: white;
+                            text-align: center;
+                            font-size: 1.1em;
+                        }
+                    }
+                    .btn-login{
+                        width: 100%;
+                        background-color: rgb(var(--color-btn-save));
+                        color: white;
+                        border-radius: 5px;
+                        border: none;
+                        height: 35px;
+                        cursor: pointer;
+                    }
+                }
+            }
+        }
+    }
+}

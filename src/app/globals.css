@@ -1,6 +1,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --color-btn-save: 28, 58, 223 ;
 }
 
 @media (prefers-color-scheme: dark) {
