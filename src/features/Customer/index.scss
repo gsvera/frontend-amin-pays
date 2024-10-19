@@ -1,0 +1,13 @@
+.selected-customer, .selected-customer > td, .selected-customer .ant-table-cell-fix-right{
+    background-color: var(--color-row-select) !important;
+    color: white;
+    font-weight: 500;
+    svg{
+        fill: white;
+    }
+    .icon-contact {
+        svg{
+            font-size: 15px !important;
+        }
+    }
+}

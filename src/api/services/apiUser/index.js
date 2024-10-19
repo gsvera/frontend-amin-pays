@@ -1,6 +1,6 @@
 import axiosInstance from "../../api";
 
-const BASE_URL = "/user";
+const BASE_URL_AUTH = "/auth/user";
 const BASE_URL_PUBLIC = "/public";
 
 const apiUser = {
@@ -9,6 +9,9 @@ const apiUser = {
   },
   login: function (data) {
     return axiosInstance.post(`${BASE_URL_PUBLIC}/login`, data);
+  },
+  logout: function () {
+    return axiosInstance.post(`${BASE_URL_AUTH}/logout`);
   },
 };
 

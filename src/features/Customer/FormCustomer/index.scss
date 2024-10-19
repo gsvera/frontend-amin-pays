@@ -1,0 +1,22 @@
+.form-add-customer{
+    width: 400px;
+    &.ant-modal{
+        top: 50px;
+    }
+    .form-add-customer-item{
+        margin-bottom: 5px !important;
+        .ant-form-item-row{
+            display: block;
+            .ant-form-item-label{
+                display: flex;
+                justify-content: start;
+            }
+        }
+    }
+    .mr-1{
+        margin-right: 10px;
+    }
+    .ml-1{
+        margin-left: 10px;
+    }
+}

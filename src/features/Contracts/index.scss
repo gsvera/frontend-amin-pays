@@ -1,0 +1,41 @@
+.content-module{
+    max-height: 90%;
+    .body-module {
+        background-color: var(--background-menu-header);
+        width: 100%;
+        height: 100%;
+        padding: 10px 5px;
+        margin-top: 10px;
+        display: flex;
+    }
+    .list-contract{
+        width: 520px;     
+        border-spacing: 0;  
+        background-color: white;
+        .badge{
+            border-radius: 3px;
+            padding: 2px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        thead {
+            tr {
+                th {
+                    padding: 5px;
+                }
+            }
+        }
+        tbody {
+            tr {
+                border-bottom: gray;
+                td {
+                    padding: 2px;
+                    text-align: center;
+                }
+            }
+            tr:hover {
+                background-color: var(--color-row-select);
+            }
+        }
+    }
+}

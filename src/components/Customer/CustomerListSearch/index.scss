@@ -1,0 +1,12 @@
+.item-list{
+    font-weight: 500;
+    color: var(--color-text-strong);
+    border-bottom: 1px solid gray;
+    padding: 3px 5px;
+    display: flex;
+    justify-content: space-between;
+    &:hover{
+        background-color: #5696ff !important;
+        color: white;
+    }
+}

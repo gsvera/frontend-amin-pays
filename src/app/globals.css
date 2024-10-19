@@ -1,7 +1,27 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --color-btn-save: 28, 58, 223 ;
+  --color-btn-login: #015fdd;
+  --background-menu-principal: #3c3c3c;
+  --background-menu-header: #e8e8e8;
+  --back-color-disabled: #a0a0a0;
+  --background-strong-blue: #15243E;
+  --background-input: #FAFAFA;
+
+  --color-success:#01dd08 ;
+  --color-primary: #015fdd;
+  --color-cancel: #474747;
+  --color-danger: #df1313 ; 
+  --color-checked: #39ac00 ;
+  --color-btn-success: #2cbf18 ;
+  --color-btn-action: #e48401;
+  --color-label:#001d79 ;
+
+  --color-text-strong: black;
+  --color-text-strong-inverter: white;
+  --color-text-secondary: #b1b1b1 ;
+
+  --color-row-select: #5696ff;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -15,6 +35,7 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
+  height: 100%;
 }
 
 body {
@@ -40,4 +61,118 @@ a {
   html {
     color-scheme: dark;
   }
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+  background-color: var(--background-menu-header);
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey; 
+  border-radius: 10px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--background-menu-principal); 
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--background-menu-principal); 
+}
+
+/* Para centrar el contenido del boton a centro en x y */
+.btn-center-child{
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+}
+
+.btn-accept{
+  border: none;
+  border-radius: 3px; 
+  background-color: var(--color-btn-success);
+  color: white;
+  padding: 7px 15px;
+}
+
+.btn-update{
+  border: none;
+  border-radius: 3px; 
+  background-color: var(--color-primary);
+  color: white;
+  padding: 7px 15px;
+}
+
+.btn-cancel{
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-cancel);
+  color: white;
+  padding: 7px 15px;
+}
+.btn-danger{
+  border: none;
+  border-radius: 3px;
+  background-color: var(--color-danger);
+  color: white;
+  padding: 7px 15px;
+}
+.btn-add{
+  background-color: var(--color-primary);
+  border: none;
+  border-radius: 3px;
+  color: white;
+  padding: 5px;
+  padding: 7px 15px;
+}
+.btn-action {
+  background-color: var(--color-btn-action);
+  border: none;
+  border-radius: 3px;
+  color: white;
+  padding: 5px;
+  padding: 7px 15px;
+}
+.btn-simple {
+  background-color: transparent ;
+  border: none;
+  font-weight: bold;
+  color: black;
+  padding: 7px 15px;
+}
+.btn-long{
+  width: 100% !important;
+}
+.disabled-button {
+  background: var(--back-color-disabled) !important;
+  text-align: center;
+  padding: 7px 15px;    
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  width: 100%;
+}
+.disabled-button:active{
+  transform: scale(1) !important;
+}
+.click{
+  cursor: pointer;
+}
+.click:active{
+  transform: scale(0.9);
+}
+.content-module{
+  padding: 10px 30px 0 20px;
+  width: 100%
+}
+.icon-size-17{
+  font-size: 17px;
+}
+.bold{
+  font-weight: bold;
 }

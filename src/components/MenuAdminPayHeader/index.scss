@@ -1,0 +1,33 @@
+.menu-admi-pay-header{
+    width: 100% !important;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--background-menu-header);
+    padding-right: 15px;
+    .content-img-logo{
+        justify-content: center;
+        padding: 10px;
+        .logo-menu{
+            width: 125px;
+        }
+    }  
+    .aling-icon-menu {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 125px;
+        margin-left: 30px;
+    }
+    .icon-menu {
+        color: var(--background-menu-principal);
+        font-size: 20px !important;
+        cursor: pointer;
+        border: 1px solid var(--background-menu-principal);
+        padding: 5px;
+        border-radius: 5px;
+    }
+    .icon-menu:active {
+        transform: scale(0.95);
+    }
+}

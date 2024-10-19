@@ -1,0 +1,9 @@
+.list-contract-customer{
+    position: absolute;
+    width: 265px;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 99;
+    background-color: var(--background-input);
+    padding: 0 5px;
+}

@@ -1,0 +1,37 @@
+.modal-logout{
+    width: 250px !important;
+    .ant-modal-content{
+        padding: 0;
+    }
+    .ant-modal-body{
+        text-align: center;
+        padding: 20px 24px;
+    }
+    .ant-modal-footer {
+        text-align: center;
+        height: 50px;
+        margin: 0;
+        .ant-row {
+            height: 100%;
+        }
+        .btn-accept, .btn-cancel {
+            color: white;
+            border: none;
+            font-weight: 600;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+            &:active{
+                transform: scale(0.95);
+            }
+        }
+        .btn-cancel {
+            background-color: var(--color-cancel);
+            border-radius: 0 0 0 5px;
+        }
+        .btn-accept {
+            background-color: var(--color-primary);
+            border-radius: 0 0 5px 0;
+        }
+    }
+}

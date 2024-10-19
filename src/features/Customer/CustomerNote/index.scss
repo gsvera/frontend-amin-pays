@@ -1,0 +1,29 @@
+.customer-note-add{
+    background-color: var(--background-strong-blue);
+    padding: 10px 15px;
+    border-radius: 5px;
+    .title-note{
+        text-align: center;
+        font-weight: bold;
+        color: var(--color-text-strong-inverter);
+    }
+    .list-note{
+        height: 250px;
+        width: 255px;
+        overflow-y: auto;
+        overflow-x: hidden;
+    }
+    .ant-list-split{
+        height: 260px;
+    }
+    .input-note {
+        .ant-input{
+            border: 1px solid black!important;
+            border-radius: 5px !important;
+        }
+    }
+    .ant-input-data-count {
+        color: var(--color-text-strong-inverter) !important;
+        font-weight: 500 !important;
+    }
+}

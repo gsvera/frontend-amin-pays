@@ -1,20 +1,8 @@
 "use client";
 import Image from "next/image";
 import styles from "./page.module.css";
-import { useQuery } from "@tanstack/react-query";
-import apiUser from "@/api/services/apiUser";
-import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 
 export default function Home() {
-  // const { data } = useQuery({
-  //   queryKey: REACT_QUERY_KEYS.user.save("s"),
-  //   queryFn: () => apiUser.prueba(),
-  //   ...{
-  //     select: (data) => data,
-  //   },
-  // });
-  // console.log(data);
-
   return (
     <div className={styles.page}>
       <main className={styles.main}>

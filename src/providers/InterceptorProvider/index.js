@@ -1,24 +1,18 @@
 "use client";
 import { createContext, useCallback, useEffect, useState } from "react";
 import axiosInstance from "@/api/api";
-// import { useDispatch } from "react-redux";
-// import { useSelector } from "react-redux";
-// import { setToken } from "@/store-redux/slide/userSlide";
+import { useDispatch, useSelector } from "react-redux";
+import { setToken } from "@/store-redux/slide/userSlide";
+import { useNotification } from "@/hooks/UseNotification";
 
 const axiosInstances = [axiosInstance];
 
 const ApiRequestContext = createContext(null);
 
 const ApiRequestProvider = ({ children }) => {
-  //   const dispatch = useDispatch();
-  const [sessionToken, setSesionToken] = useState(false);
-  //   const { token } = useSelector((state) => state.userSlice);
-  // const { openErrorNotification, destroyAllNotifications, destroyNotification } = useNotification();
-  // const { format } = useDate();
-
-  useEffect(() => {
-    if (sessionToken) localStorage.removeItem("tokenSession");
-  }, [sessionToken]);
+  const dispatch = useDispatch();
+  const { token } = useSelector((state) => state.userSlice);
+  const { openErrorNotification } = useNotification();
 
   const interceptRequestHandler = useCallback(
     /**
@@ -35,35 +29,28 @@ const ApiRequestProvider = ({ children }) => {
       //   }
       config.headers = {
         ...config.headers,
-        // Authorization: token ? ` Bearer ${token}` : undefined,
+        Authorization: token ? `Bearer ${token}` : undefined,
       };
 
       return config;
     },
-    // [token]
-    []
+    [token]
   );
 
   const interceptResponseErrorHandler = useCallback(
     (error) => {
-      console.log("🚀 ~ ApiRequestProvider ~ error:", error);
-      //   setToken(null);
-
-      setSesionToken(true);
       const { status: statusCode, data, headers } = error?.response ?? {};
-      //   if (statusCode === 403 && data?.error === "EXPIRED_TOKEN" && token) {
-      // destroyAllNotifications();
-      // openErrorNotification(t('logout.token_expired'));
-      /**  METODO PARA DESLOGEAR CUANDO EL TOKEN HAYA EXPIRADO  */
-      // dispatch(logout());
-      //   }
+      if (statusCode === 403 && token) {
+        dispatch(setToken(null));
+        dispatch(setDataUser(null));
+        openErrorNotification(t("logout.token_expired"));
+      }
       // Reject promise if usual error
       if (statusCode !== 401) {
         return Promise.reject(error);
       }
     },
-    // [dispatch]'
-    []
+    [dispatch]
   );
 
   useEffect(() => {
@@ -85,8 +72,7 @@ const ApiRequestProvider = ({ children }) => {
         axiosInstance.interceptors.request.eject(responseInterceptors[index]);
       }
     };
-    //   }, [interceptRequestHandler, interceptResponseErrorHandler, token]);
-  }, [interceptRequestHandler, interceptResponseErrorHandler]);
+  }, [interceptRequestHandler, interceptResponseErrorHandler, token]);
 
   return <ApiRequestContext.Provider>{children}</ApiRequestContext.Provider>;
 };

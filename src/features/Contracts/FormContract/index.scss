@@ -1,0 +1,23 @@
+.form-contract{
+    .group-inputs-contract{
+        justify-content: space-between;
+        height: 80px;
+        .ant-form-item-row{
+            display: block;
+            .ant-form-item-label{
+                text-align: start;
+                label{
+                    color: var(--color-label);
+                    font-weight: 500;
+                }
+            }
+            .ant-input-number, .ant-picker{
+                width: 100%;
+            }            
+        }
+    }
+    .button-action{
+        margin-right: 5px;
+        margin-bottom: 10px;
+    }
+}
