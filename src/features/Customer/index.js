@@ -1,5 +1,5 @@
 import { Table, Row, Tooltip, Input, Col } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Button from "@/components/Button";
 import {
   UserAddOutlined,
@@ -9,7 +9,11 @@ import {
 } from "@ant-design/icons";
 import "./index.scss";
 import FormCustomer from "./FormCustomer";
-import { defaultPageParams, pageSizeOptions } from "@/config/constants";
+import {
+  defaultPageParams,
+  pageSizeOptions,
+  PROFILE_PERMISSIONS,
+} from "@/config/constants";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 import apiCustomer from "@/api/services/apiCustomer";
@@ -22,9 +26,11 @@ import { useNotification } from "@/hooks/UseNotification";
 import { openWindow } from "@/utils/GeneralUtils";
 import CustomerNote from "./CustomerNote";
 import ButtonAddCustomer from "./ButtonAddCustomer";
+import { HasAccessPermission } from "@/hooks/HasAccessPermission";
 
 export default function Customer() {
   const { openErrorNotification, openSuccessNotification } = useNotification();
+  const { hasAccess } = HasAccessPermission();
   const { dataUser } = useSelector((state) => state.userSlice);
   const [openModal, setOpenModal] = useState(false);
   const [openDeleteModal, setOpenDeleteModal] = useState(false);
@@ -34,6 +40,26 @@ export default function Customer() {
   const [entityToEdit, setEntityToEdit] = useState(null);
   const [rowSelected, setRowSelected] = useState(null);
   const queryClient = useQueryClient();
+
+  const permissionToAddCustomer = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.ADD_CUSTOMER),
+    [hasAccess]
+  );
+
+  const permissionToOptionsContact = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.VIEW_OPTIONS_CONTACT),
+    [hasAccess]
+  );
+
+  const permissionToEditCustomer = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.EDIT_CUSTOMER),
+    [hasAccess]
+  );
+
+  const permissionToDeleteCustomer = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.DELETE_CUSTOMER),
+    [hasAccess]
+  );
 
   const { data: customerData = [], isLoading } = useQuery({
     queryKey: [REACT_QUERY_KEYS.customer.filterData("customer-table")],
@@ -174,22 +200,26 @@ export default function Customer() {
       fixed: "right",
       render: (_, row) => (
         <Row style={{ justifyContent: "space-evenly" }}>
-          <div>
-            <Tooltip title="Editar cliente">
-              <EditIcon
-                className="click"
-                onClick={(e) => GetEntity(e, row?.id)}
-              />
-            </Tooltip>
-          </div>
-          <div>
-            <Tooltip title="Borrar cliente">
-              <DeleteOutlined
-                className="click"
-                onClick={(e) => openModalDelete(e, row?.id)}
-              />
-            </Tooltip>
-          </div>
+          {permissionToEditCustomer && (
+            <div>
+              <Tooltip title="Editar cliente">
+                <EditIcon
+                  className="click"
+                  onClick={(e) => GetEntity(e, row?.id)}
+                />
+              </Tooltip>
+            </div>
+          )}
+          {permissionToDeleteCustomer && (
+            <div>
+              <Tooltip title="Borrar cliente">
+                <DeleteOutlined
+                  className="click"
+                  onClick={(e) => openModalDelete(e, row?.id)}
+                />
+              </Tooltip>
+            </div>
+          )}
         </Row>
       ),
     },
@@ -241,13 +271,15 @@ export default function Customer() {
               loadingSearch={isLoading}
             />
           </div>
-          <div style={{ marginRight: "10px" }}>
-            <ButtonAddCustomer
-              handleCloseModal={closeModal}
-              entityToEdit={entityToEdit}
-              openEdit={openModal}
-            />
-          </div>
+          {permissionToAddCustomer && (
+            <div style={{ marginRight: "10px" }}>
+              <ButtonAddCustomer
+                handleCloseModal={closeModal}
+                entityToEdit={entityToEdit}
+                openEdit={openModal}
+              />
+            </div>
+          )}
           <div>
             <Button
               className="btn-simple"
@@ -262,87 +294,89 @@ export default function Customer() {
             />
           </div>
         </Row>
-        <Row style={{ marginBottom: "20px", alignItems: "center" }}>
-          {rowSelected?.celPhone && (
-            <div style={{ width: "100px", textAlign: "center" }}>
-              <Col style={{ fontWeight: "bold" }}>Celular</Col>
-              <Col>
-                <Row style={{ justifyContent: "space-evenly" }}>
-                  {rowSelected?.celPhone && rowSelected?.celPhoneWhatsapp && (
-                    <Tooltip
-                      title={`Enviar WhatsApp al numero ${rowSelected?.celPhone}`}
-                    >
-                      <WhatsAppOutlined
-                        className="click icon-contact"
-                        style={{ color: "var(--color-checked)" }}
-                        onClick={(e) => handleWhatsapp(rowSelected?.celPhone)}
-                      />
-                    </Tooltip>
-                  )}
-                  {rowSelected?.celPhone && (
-                    <Tooltip
-                      title={`Llamar al numero ${rowSelected?.celPhone}`}
-                    >
-                      <PhoneOutlined
-                        className="click icon-contact"
-                        style={{ color: "var(--color-primary)" }}
-                        onClick={(e) => handleCall(rowSelected?.celPhone)}
-                      />
-                    </Tooltip>
-                  )}
-                </Row>
-              </Col>
-            </div>
-          )}
-          {rowSelected?.phoneOffice && (
-            <div style={{ width: "100px", textAlign: "center" }}>
-              <Col style={{ fontWeight: "bold" }}>Oficina</Col>
-              <Col>
-                <Row style={{ justifyContent: "space-evenly" }}>
-                  {rowSelected?.phoneOffice &&
-                    rowSelected?.phoneOfficeWhatsapp && (
+        {permissionToOptionsContact && (
+          <Row style={{ marginBottom: "20px", alignItems: "center" }}>
+            {rowSelected?.celPhone && (
+              <div style={{ width: "100px", textAlign: "center" }}>
+                <Col style={{ fontWeight: "bold" }}>Celular</Col>
+                <Col>
+                  <Row style={{ justifyContent: "space-evenly" }}>
+                    {rowSelected?.celPhone && rowSelected?.celPhoneWhatsapp && (
                       <Tooltip
-                        title={`Enviar WhatsApp al numero ${rowSelected?.phoneOffice}`}
+                        title={`Enviar WhatsApp al numero ${rowSelected?.celPhone}`}
                       >
                         <WhatsAppOutlined
+                          className="click icon-contact"
                           style={{ color: "var(--color-checked)" }}
-                          className="click"
-                          onClick={(e) =>
-                            handleWhatsapp(rowSelected?.phoneOffice)
-                          }
+                          onClick={(e) => handleWhatsapp(rowSelected?.celPhone)}
                         />
                       </Tooltip>
                     )}
-                  {rowSelected?.phoneOffice && (
-                    <Tooltip
-                      title={`Llamar al numero ${rowSelected?.phoneOffice}`}
-                    >
-                      <PhoneOutlined
-                        style={{ color: "var(--color-primary)" }}
-                        className="click"
-                        onClick={(e) => handleCall(rowSelected?.phoneOffice)}
-                      />
-                    </Tooltip>
-                  )}
+                    {rowSelected?.celPhone && (
+                      <Tooltip
+                        title={`Llamar al numero ${rowSelected?.celPhone}`}
+                      >
+                        <PhoneOutlined
+                          className="click icon-contact"
+                          style={{ color: "var(--color-primary)" }}
+                          onClick={(e) => handleCall(rowSelected?.celPhone)}
+                        />
+                      </Tooltip>
+                    )}
+                  </Row>
+                </Col>
+              </div>
+            )}
+            {rowSelected?.phoneOffice && (
+              <div style={{ width: "100px", textAlign: "center" }}>
+                <Col style={{ fontWeight: "bold" }}>Oficina</Col>
+                <Col>
+                  <Row style={{ justifyContent: "space-evenly" }}>
+                    {rowSelected?.phoneOffice &&
+                      rowSelected?.phoneOfficeWhatsapp && (
+                        <Tooltip
+                          title={`Enviar WhatsApp al numero ${rowSelected?.phoneOffice}`}
+                        >
+                          <WhatsAppOutlined
+                            style={{ color: "var(--color-checked)" }}
+                            className="click"
+                            onClick={(e) =>
+                              handleWhatsapp(rowSelected?.phoneOffice)
+                            }
+                          />
+                        </Tooltip>
+                      )}
+                    {rowSelected?.phoneOffice && (
+                      <Tooltip
+                        title={`Llamar al numero ${rowSelected?.phoneOffice}`}
+                      >
+                        <PhoneOutlined
+                          style={{ color: "var(--color-primary)" }}
+                          className="click"
+                          onClick={(e) => handleCall(rowSelected?.phoneOffice)}
+                        />
+                      </Tooltip>
+                    )}
+                  </Row>
+                </Col>
+              </div>
+            )}
+            {rowSelected?.email && (
+              <div style={{ width: "100px", textAlign: "center" }}>
+                <Col style={{ fontWeight: "bold" }}>Correo</Col>
+                <Row style={{ justifyContent: "center" }}>
+                  <Tooltip title={`Enviar correo a ${rowSelected?.email}`}>
+                    <MailOutlined
+                      style={{ color: "var(--color-primary)" }}
+                      className="click"
+                      onClick={(e) => handleEmail(rowSelected?.email)}
+                    />
+                  </Tooltip>
                 </Row>
-              </Col>
-            </div>
-          )}
-          {rowSelected?.email && (
-            <div style={{ width: "100px", textAlign: "center" }}>
-              <Col style={{ fontWeight: "bold" }}>Correo</Col>
-              <Row style={{ justifyContent: "center" }}>
-                <Tooltip title={`Enviar correo a ${rowSelected?.email}`}>
-                  <MailOutlined
-                    style={{ color: "var(--color-primary)" }}
-                    className="click"
-                    onClick={(e) => handleEmail(rowSelected?.email)}
-                  />
-                </Tooltip>
-              </Row>
-            </div>
-          )}
-        </Row>
+              </div>
+            )}
+          </Row>
+        )}
       </Row>
       <div
         style={{

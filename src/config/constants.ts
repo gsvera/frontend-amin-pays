@@ -137,3 +137,26 @@ export const ARRAY_STATUS_CONTRACT:object[] = [
         color: 'white'
     }
 ];
+
+export enum PROFILE_PERMISSIONS {
+    /** Permite poder editar los clientes */
+    EDIT_CUSTOMER = 1,
+    /** Permite poder eliminar los clientes */
+    DELETE_CUSTOMER = 2,
+    /** Permite poder crear nuevos clientes */
+    ADD_CUSTOMER = 3,
+    /** Permite visualizar las opciones de accion de contactos de los clientes */
+    VIEW_OPTIONS_CONTACT = 4,
+    /** Permite agregar notas informativas al cliente */
+    ADD_NOTE_CUSTOMER = 5,
+    /** Para visualizar el modulo de clientes */
+    MODULE_CUSTOMER = 6,
+    /** Para visualizar el modulo de contratos */
+    MODULE_CONTRACTS = 7,
+    /** Permiso para agregar contratos */
+    ADD_CONTRACTS = 8,
+    /** Permiso para eliminar contratos */
+    DELETE_CONTRACTS = 9,
+    /** Permiso para agregar pagos */
+    ADD_PAYS = 10
+}

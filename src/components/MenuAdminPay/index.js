@@ -5,9 +5,21 @@ import {
   FileProtectOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
-import { MODULES } from "@/config/constants";
+import { MODULES, PROFILE_PERMISSIONS } from "@/config/constants";
+import { HasAccessPermission } from "@/hooks/HasAccessPermission";
+import { useMemo } from "react";
 
 const MenuAdminPay = ({ changeModule }) => {
+  const { hasAccess } = HasAccessPermission();
+
+  const canAccessCustomerModule = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.MODULE_CUSTOMER),
+    [hasAccess]
+  );
+  const canAccessContractModule = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.MODULE_CONTRACTS),
+    [hasAccess]
+  );
   const handleMenuModule = (module) => {
     changeModule?.(module);
   };
@@ -32,26 +44,30 @@ const MenuAdminPay = ({ changeModule }) => {
             </Tooltip>
           </div>
         </Col>
-        <Col>
-          <div
-            className="element-menu"
-            onClick={(e) => handleMenuModule(MODULES.MODULE_CUSTOMER)}
-          >
-            <Tooltip title="Clientes" placement="right">
-              <UserOutlined className="icon-menu-principal" />
-            </Tooltip>
-          </div>
-        </Col>
-        <Col>
-          <div
-            className="element-menu"
-            onClick={(e) => handleMenuModule(MODULES.MODULE_CONTRACTS)}
-          >
-            <Tooltip title="Contratos" placement="right">
-              <FileProtectOutlined className="icon-menu-principal" />
-            </Tooltip>
-          </div>
-        </Col>
+        {canAccessCustomerModule && (
+          <Col>
+            <div
+              className="element-menu"
+              onClick={(e) => handleMenuModule(MODULES.MODULE_CUSTOMER)}
+            >
+              <Tooltip title="Clientes" placement="right">
+                <UserOutlined className="icon-menu-principal" />
+              </Tooltip>
+            </div>
+          </Col>
+        )}
+        {canAccessContractModule && (
+          <Col>
+            <div
+              className="element-menu"
+              onClick={(e) => handleMenuModule(MODULES.MODULE_CONTRACTS)}
+            >
+              <Tooltip title="Contratos" placement="right">
+                <FileProtectOutlined className="icon-menu-principal" />
+              </Tooltip>
+            </div>
+          </Col>
+        )}
       </Col>
     </div>
   );

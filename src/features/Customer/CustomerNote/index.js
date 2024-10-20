@@ -8,11 +8,19 @@ import { useState, useMemo, useEffect } from "react";
 import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 import ListItemNote from "./ListItemNote";
 import CustomAntEmpty from "@/components/CustomAntEmpty";
+import { HasAccessPermission } from "@/hooks/HasAccessPermission";
+import { PROFILE_PERMISSIONS } from "@/config/constants";
 
 export default function CustomerNote({ user, customer }) {
   const { openErrorNotification, openSuccessNotification } = useNotification();
   const queryClient = useQueryClient();
   const [localValueNote, setLocalValueNote] = useState("");
+  const { hasAccess } = HasAccessPermission();
+
+  const permissionToAddNote = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.ADD_NOTE_CUSTOMER),
+    [hasAccess]
+  );
 
   const { data: noteList = [] } = useQuery({
     queryKey: REACT_QUERY_KEYS.customerNote.getByCustomer(customer?.id),
@@ -73,36 +81,40 @@ export default function CustomerNote({ user, customer }) {
   return (
     <div className="customer-note-add">
       <div className="title-note">Notas del cliente</div>
-      <List
-        className="list-note"
-        dataSource={noteList}
-        renderItem={(item) => <ListItemNote note={item} />}
-        locale={{
-          emptyText: customer ? (
-            <CustomAntEmpty type="error" msg="No se encontraron notas" />
-          ) : (
-            <div></div>
-          ),
-        }}
-      />
-      <div>
-        <Input.TextArea
-          className="input-note"
-          rows={5}
-          maxLength={5000}
-          showCount
-          style={{ marginBottom: "25px", border: "1px solid black" }}
-          onChange={(e) => setLocalValueNote(e.target.value)}
-          value={localValueNote}
-          disabled={!customer?.id}
-        />
-        <Button
-          text="Guardar"
-          className="btn-add btn-long"
-          onClick={handleSubmitNote}
-          disabled={disabledButton}
+      <div style={{ height: `${permissionToAddNote ? "60%" : "100%"}` }}>
+        <List
+          className="list-note"
+          dataSource={noteList}
+          renderItem={(item) => <ListItemNote note={item} />}
+          locale={{
+            emptyText: customer ? (
+              <CustomAntEmpty type="error" msg="No se encontraron notas" />
+            ) : (
+              <div></div>
+            ),
+          }}
         />
       </div>
+      {permissionToAddNote && (
+        <div>
+          <Input.TextArea
+            className="input-note"
+            rows={5}
+            maxLength={5000}
+            showCount
+            style={{ marginBottom: "25px", border: "1px solid black" }}
+            onChange={(e) => setLocalValueNote(e.target.value)}
+            value={localValueNote}
+            disabled={!customer?.id}
+          />
+          <Button
+            text="Guardar"
+            className="btn-add btn-long"
+            onClick={handleSubmitNote}
+            disabled={disabledButton}
+          />
+        </div>
+      )}
     </div>
   );
 }

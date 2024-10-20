@@ -7,6 +7,7 @@ const initialState = {
     firstName: null,
     lastName: null,
     email: null,
+    permissionXProfiles: [],
   },
 };
 

@@ -1,5 +1,5 @@
 import { Col, Row, Tooltip } from "antd";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Button from "@/components/Button";
 import {
   FileAddOutlined,
@@ -16,20 +16,32 @@ import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 import apiContract from "@/api/services/apiContract";
 import { convertCurrency, getStatusContract } from "@/utils/GeneralUtils";
 import CustomTable from "@/components/CustomTable";
-import { FORMAT_DATE, STATUS_CONTRACT } from "@/config/constants";
+import {
+  FORMAT_DATE,
+  PROFILE_PERMISSIONS,
+  STATUS_CONTRACT,
+} from "@/config/constants";
 import { formatDate } from "@/utils/DateUtils";
 import "./index.scss";
 import CustomModalConfirm from "@/components/CustomModalConfirm";
 import { useNotification } from "@/hooks/UseNotification";
+import { HasAccessPermission } from "@/hooks/HasAccessPermission";
 
 export default function Contracts() {
   const dispatch = useDispatch();
   const { dataCustomer } = useSelector((state) => state.customerSlice);
   const { openSuccessNotification, openErrorNotification } = useNotification();
+  const { hasAccess } = HasAccessPermission();
   const [openModalContract, setOpenModalContract] = useState(false);
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [idContractSelected, setIdContractSelected] = useState();
   const [idContractView, setIdContractView] = useState();
+
+  const canAddContract = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.ADD_CONTRACTS),
+    [hasAccess]
+  );
+
   const tableDataHead = [
     {
       index: "statusContract",
@@ -176,18 +188,20 @@ export default function Contracts() {
               onClick={(e) => cleanSeleccionCustomer()}
             />
           </Row>
-          <div>
-            <Button
-              className="btn-add"
-              onClick={(e) => handleOpenModalContrat(true)}
-              text={
-                <div>
-                  Agregar contrato{" "}
-                  <FileAddOutlined style={{ fontSize: "15px" }} />
-                </div>
-              }
-            />
-          </div>
+          {canAddContract && (
+            <div>
+              <Button
+                className="btn-add"
+                onClick={(e) => handleOpenModalContrat(true)}
+                text={
+                  <div>
+                    Agregar contrato{" "}
+                    <FileAddOutlined style={{ fontSize: "15px" }} />
+                  </div>
+                }
+              />
+            </div>
+          )}
         </Row>
       </Row>
       <div className="body-module">

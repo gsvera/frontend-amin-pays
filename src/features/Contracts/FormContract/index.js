@@ -31,6 +31,7 @@ import {
   FORMAT_DATE,
   INTEREST_RATE,
   STATUS_CONTRACT,
+  PROFILE_PERMISSIONS,
 } from "@/config/constants";
 import {
   GenerateAlemanAmortizacion,
@@ -46,6 +47,7 @@ import { formatDate } from "@/utils/DateUtils";
 import moment from "moment";
 import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 import dayjs from "dayjs";
+import { HasAccessPermission } from "@/hooks/HasAccessPermission";
 
 const defaultData = {
   typeAmortization: AMORTIZATION.FRANCES,
@@ -63,6 +65,7 @@ export const FormContract = ({
 }) => {
   const [form] = useForm();
   const { openErrorNotification, openSuccessNotification } = useNotification();
+  const { hasAccess } = HasAccessPermission();
   const { dataCustomer } = useSelector((state) => state.customerSlice);
   const { dataUser } = useSelector((state) => state.userSlice);
   const [dataAmortization, setDataAmortization] = useState([]);
@@ -78,6 +81,11 @@ export const FormContract = ({
   useEffect(() => {
     form.setFieldsValue(defaultData);
   }, []);
+
+  const permissionToAddCustomer = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.ADD_CUSTOMER),
+    [hasAccess]
+  );
 
   const disabledCalculator = useMemo(
     () => !wStartDate || !wAmount,
@@ -252,11 +260,13 @@ export const FormContract = ({
                 <div style={{ fontWeight: "bold" }}>Buscar cliente</div>
                 <SearchCustomerContract />
               </Col>
-              <Col style={{ display: "flex", alignItems: "end" }}>
-                <div>
-                  <ButtonAddCustomer persistCustomer />
-                </div>
-              </Col>
+              {permissionToAddCustomer && (
+                <Col style={{ display: "flex", alignItems: "end" }}>
+                  <div>
+                    <ButtonAddCustomer persistCustomer />
+                  </div>
+                </Col>
+              )}
             </Row>
           )}
           <Row style={{ marginTop: "25px" }}>

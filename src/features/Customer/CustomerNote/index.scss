@@ -2,19 +2,20 @@
     background-color: var(--background-strong-blue);
     padding: 10px 15px;
     border-radius: 5px;
+    height: 80vh;
+    max-height: 80vh;
     .title-note{
         text-align: center;
         font-weight: bold;
         color: var(--color-text-strong-inverter);
+        font-size: 17px;
+        margin-bottom: 10px;
     }
     .list-note{
-        height: 250px;
+        height: 95%;
         width: 255px;
         overflow-y: auto;
         overflow-x: hidden;
-    }
-    .ant-list-split{
-        height: 260px;
     }
     .input-note {
         .ant-input{
