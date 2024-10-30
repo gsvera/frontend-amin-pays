@@ -3,13 +3,18 @@ import {
   UserOutlined,
   DashboardOutlined,
   FileProtectOutlined,
+  AuditOutlined,
 } from "@ant-design/icons";
 import "./index.scss";
-import { MODULES, PROFILE_PERMISSIONS } from "@/config/constants";
+import {
+  MODULES,
+  MODULES_MODALS,
+  PROFILE_PERMISSIONS,
+} from "@/config/constants";
 import { HasAccessPermission } from "@/hooks/HasAccessPermission";
 import { useMemo } from "react";
 
-const MenuAdminPay = ({ changeModule }) => {
+const MenuAdminPay = ({ changeModule, openModuleModal }) => {
   const { hasAccess } = HasAccessPermission();
 
   const canAccessCustomerModule = useMemo(
@@ -22,6 +27,9 @@ const MenuAdminPay = ({ changeModule }) => {
   );
   const handleMenuModule = (module) => {
     changeModule?.(module);
+  };
+  const handleMenuModuleModal = (module) => {
+    openModuleModal?.(module);
   };
 
   return (
@@ -68,6 +76,16 @@ const MenuAdminPay = ({ changeModule }) => {
             </div>
           </Col>
         )}
+        <Col>
+          <div
+            className="element-menu"
+            onClick={(e) => handleMenuModuleModal(MODULES_MODALS.MODAL_PAY)}
+          >
+            <Tooltip title="Pagos" placement="right">
+              <AuditOutlined className="icon-menu-principal" />
+            </Tooltip>
+          </div>
+        </Col>
       </Col>
     </div>
   );

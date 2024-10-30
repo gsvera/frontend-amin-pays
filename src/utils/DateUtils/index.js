@@ -17,7 +17,16 @@ export const CalculateAddPeriod = ({ period, currentDate, timeAdd }) => {
   }
 };
 
+const disabledDateAfterToday = {
+  disabledDate: (v) => v && v.isAfter(moment().endOf("day")),
+};
+
+export const DATE_PICKER_PROPS = {
+  disabledDateAfterToday,
+};
+
 export default {
   formatDate,
   CalculateAddPeriod,
+  DATE_PICKER_PROPS,
 };

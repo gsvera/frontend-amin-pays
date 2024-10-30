@@ -1,7 +1,4 @@
 import DelaySearcher from "@/components/DelaySearcher";
-import { CustomerListSearch } from "@/components/Customer/CustomerListSearch";
-import { CustomAntEmpty } from "@/components/CustomAntEmpty";
-import { List } from "antd";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useState, useEffect, useMemo, useRef } from "react";
 import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
@@ -9,8 +6,9 @@ import apiCustomer from "@/api/services/apiCustomer";
 import { useDispatch } from "react-redux";
 import { setCustomer } from "@/store-redux/slide/customerSlide";
 import "./index.scss";
+import CustomList from "../Customer/CustomList";
 
-export const SearchCustomerContract = () => {
+export const SearchCustomer = () => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [valueCustomerSearch, setValueCustomerSearch] = useState();
@@ -33,18 +31,25 @@ export const SearchCustomerContract = () => {
     }
   }, [valueCustomerSearch]);
 
-  const dataListCustomer = useMemo(() => {
-    if (!valueCustomerSearch) return [];
-
-    return listCustomer;
-  }, [listCustomer, valueCustomerSearch]);
+  const dataListCustomer = useMemo(
+    () =>
+      !valueCustomerSearch
+        ? []
+        : listCustomer?.map((item) => ({
+            id: item?.id,
+            text: `${item?.firstName} ${item?.lastName}`,
+            tooltip: item?.email,
+          })),
+    [listCustomer, valueCustomerSearch]
+  );
 
   const searchCustomer = (value) => {
     setValueCustomerSearch(value);
   };
 
-  const handleSelectCustomer = (item) => {
-    dispatch(setCustomer(item));
+  const handleSelectCustomer = (value) => {
+    const valueSelected = listCustomer?.find((item) => item.id === value?.id);
+    dispatch(setCustomer(valueSelected));
     setValueCustomerSearch("");
   };
 
@@ -72,29 +77,14 @@ export const SearchCustomerContract = () => {
         cleanValueText
       />
       {valueCustomerSearch && (
-        <List
-          className="list-contract-customer"
-          dataSource={dataListCustomer}
-          renderItem={(item) => (
-            <CustomerListSearch
-              customer={item}
-              onClick={handleSelectCustomer}
-            />
-          )}
-          locale={{
-            emptyText: dataListCustomer ? (
-              <CustomAntEmpty
-                type="error"
-                msg="No se encontro un cliente con ese nombre"
-              />
-            ) : (
-              <div></div>
-            ),
-          }}
+        <CustomList
+          dataList={dataListCustomer}
+          handleSelect={handleSelectCustomer}
+          widthList={"265px"}
         />
       )}
     </div>
   );
 };
 
-export default SearchCustomerContract;
+export default SearchCustomer;

@@ -8,6 +8,7 @@ export const FooterModal = ({
   textSubmit,
   btnCancelClass,
   textCancel,
+  disabledBtn = false,
 }) => {
   const btnHandleCancel = () => {
     handleCancel?.();
@@ -30,6 +31,7 @@ export const FooterModal = ({
           className={btnSubmitClass}
           onClick={btnHandleSubmit}
           text={textSubmit}
+          disabled={disabledBtn}
         />
       </Col>
     </Row>

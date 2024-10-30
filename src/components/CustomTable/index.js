@@ -1,11 +1,16 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import CustomAntEmpty from "../CustomAntEmpty";
 
 export const CustomTable = ({ dataHead = [], dataBody = [], tableClass }) => {
-  const dataTableBody = useMemo(
-    () => (dataBody?.length === 0 ? [] : dataBody),
-    [dataBody]
-  );
+  const [tableData, setTableData] = useState([]);
+
+  useEffect(() => {
+    setTableData([]);
+    const timeout = setTimeout(() => {
+      setTableData(dataBody?.length === 0 ? [] : dataBody);
+    }, 0);
+    return () => clearTimeout(timeout);
+  }, [dataBody]);
 
   return (
     <table className={tableClass}>
@@ -19,8 +24,8 @@ export const CustomTable = ({ dataHead = [], dataBody = [], tableClass }) => {
         )}
       </thead>
       <tbody>
-        {dataTableBody?.length > 0 ? (
-          dataTableBody.map((item, index) => (
+        {tableData?.length > 0 ? (
+          tableData.map((item, index) => (
             <tr key={index}>
               {dataHead.map((column) => (
                 <td key={item.id}>

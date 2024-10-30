@@ -1,0 +1,24 @@
+.modul-modal-pay{
+    .form-modul-pay{
+        margin-top: 25px;
+    }
+    .ant-form-item{
+        width: 100%;
+    }
+    .ant-form-item-control-input-content{
+        display: flex;
+        justify-content: end !important;
+        > div{
+            width: 220px !important;
+        }
+        .btn-file{
+            width: 220px !important;
+        }
+        .anticon-delete{
+            color: red !important;
+        }
+    }
+    .ant-form-item-explain-error{
+        text-align: end;
+    }
+}

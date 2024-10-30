@@ -8,7 +8,6 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import FormContract from "./FormContract";
-import SearchCustomerContract from "./SearchCustomerContract";
 import { useSelector, useDispatch } from "react-redux";
 import { cleanSelection } from "@/store-redux/slide/customerSlide";
 import { useMutation, useQuery } from "@tanstack/react-query";
@@ -26,6 +25,7 @@ import "./index.scss";
 import CustomModalConfirm from "@/components/CustomModalConfirm";
 import { useNotification } from "@/hooks/UseNotification";
 import { HasAccessPermission } from "@/hooks/HasAccessPermission";
+import SearchCustomer from "@/components/SearchCustomer";
 
 export default function Contracts() {
   const dispatch = useDispatch();
@@ -59,6 +59,11 @@ export default function Contracts() {
       index: "startDate",
       label: "Fecha de inicio",
       render: (row) => <div>{formatDate(row, FORMAT_DATE.ES_FORMAT_DATE)}</div>,
+    },
+    {
+      index: "folio",
+      label: "Folio",
+      render: (row) => <div>{row}</div>,
     },
     {
       index: "typeAmortization",
@@ -176,7 +181,7 @@ export default function Contracts() {
       <Row>
         <Row style={{ justifyContent: "space-between", width: "100%" }}>
           <Row>
-            <SearchCustomerContract />
+            <SearchCustomer />
             <Button
               style={{ marginLeft: "10px" }}
               text={

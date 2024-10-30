@@ -5,7 +5,6 @@ import {
   Col,
   DatePicker,
   Select,
-  Input,
   InputNumber,
   Tooltip,
 } from "antd";
@@ -18,7 +17,7 @@ import {
   FormOutlined,
 } from "@ant-design/icons";
 import { useForm, useWatch } from "antd/es/form/Form";
-import SearchCustomerContract from "../SearchCustomerContract";
+import SearchCustomer from "../../../components/SearchCustomer";
 import ButtonAddCustomer from "@/features/Customer/ButtonAddCustomer";
 import { useSelector } from "react-redux";
 import "./index.scss";
@@ -95,7 +94,7 @@ export const FormContract = ({
   const disabledSave = useMemo(
     () =>
       disabledCalculator ||
-      dataAmortization?.dataAmortization?.length === 0 ||
+      !dataAmortization?.dataAmortization ||
       !dataCustomer?.id,
     [disabledCalculator, dataAmortization, dataCustomer?.id]
   );
@@ -174,30 +173,30 @@ export const FormContract = ({
   };
 
   const calculateAmortization = () => {
-    let dataAmortization;
+    let calculateDataAmortization;
 
     switch (form.getFieldValue("typeAmortization")) {
       case AMORTIZATION.AMERICANO:
-        dataAmortization = GenerateAmericanAmortization({
+        calculateDataAmortization = GenerateAmericanAmortization({
           ...form.getFieldsValue(),
           startDate: startDate,
         });
         break;
       case AMORTIZATION.ALEMAN:
-        dataAmortization = GenerateAlemanAmortizacion({
+        calculateDataAmortization = GenerateAlemanAmortizacion({
           ...form.getFieldsValue(),
           startDate: startDate,
         });
         break;
       case AMORTIZATION.FRANCES:
-        dataAmortization = GenerateFrancesAmortizacion({
+        calculateDataAmortization = GenerateFrancesAmortizacion({
           ...form.getFieldsValue(),
           startDate: startDate,
         });
         break;
     }
 
-    setDataAmortization(dataAmortization);
+    setDataAmortization(calculateDataAmortization);
   };
 
   const onChangeDate = (date, dateString) => {
@@ -207,6 +206,10 @@ export const FormContract = ({
   const handleCleanFields = () => {
     form.resetFields();
     form.setFieldsValue(defaultData);
+    setDataAmortization([]);
+  };
+
+  const handleChangeTypeAmortization = () => {
     setDataAmortization([]);
   };
 
@@ -227,6 +230,14 @@ export const FormContract = ({
   };
 
   function generateEntity(draft) {
+    const listPay = dataAmortization?.dataAmortization
+      ?.filter((item) => item?.key !== 0)
+      .map((item) => ({
+        payNumber: item?.key,
+        agreedDate: item?.payDate,
+        agreedPay: item?.pay,
+      }));
+
     return {
       ...form.getFieldsValue(),
       startDate: formatDate(startDate, FORMAT_DATE.EN_FORMAT_DATE),
@@ -238,6 +249,7 @@ export const FormContract = ({
       idCustomer: dataCustomer?.id,
       idCreatedUser: dataUser?.id,
       statusContract: draft ? STATUS_CONTRACT.BORRADOR : STATUS_CONTRACT.ACTIVO,
+      listPay,
     };
   }
 
@@ -258,7 +270,7 @@ export const FormContract = ({
             >
               <Col style={{ marginRight: "10px" }}>
                 <div style={{ fontWeight: "bold" }}>Buscar cliente</div>
-                <SearchCustomerContract />
+                <SearchCustomer />
               </Col>
               {permissionToAddCustomer && (
                 <Col style={{ display: "flex", alignItems: "end" }}>
@@ -341,6 +353,7 @@ export const FormContract = ({
             <Col span={4}>
               <Form.Item label="Tipo de amortización" name="typeAmortization">
                 <Select
+                  onChange={handleChangeTypeAmortization}
                   options={ARRAY_AMORTIZATION.map((item) => ({
                     value: item.value,
                     label: <Tooltip title={item.tooltip}>{item.label}</Tooltip>,
@@ -382,7 +395,7 @@ export const FormContract = ({
                     </div>
                   }
                   className="btn-add"
-                  disabled={disabledSave}
+                  disabled={disabledCalculator}
                   onClick={(e) => saveDrafContract()}
                 />
               </div>

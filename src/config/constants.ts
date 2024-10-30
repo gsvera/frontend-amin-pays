@@ -4,6 +4,10 @@ export enum MODULES {
     MODULE_CONTRACTS = 'MODULE_CONTRACTS'
 }
 
+export enum MODULES_MODALS {
+    MODAL_PAY = 'MODAL_PAY'
+}
+
 export const REGEX:object = {
     EMAIL: /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i, 
     NUMBER: /^\d+$/,
@@ -159,4 +163,11 @@ export enum PROFILE_PERMISSIONS {
     DELETE_CONTRACTS = 9,
     /** Permiso para agregar pagos */
     ADD_PAYS = 10
+}
+
+export enum TYPES_PAY {
+    PAY_LESS_TO_AMOUNT = 1,
+    PAY_EQUAL_TO_AMOUNT = 2,
+    PAY_MORE_TO_AMOUNT = 3,
+    PAY_MORE_TO_AMOUNT_BUT_DEVENGADO = 4
 }

@@ -1,0 +1,21 @@
+.custom-list {
+    position: absolute;
+    max-height: 300px;
+    overflow-y: auto;
+    z-index: 99;
+    background-color: var(--background-input);
+    padding: 0 5px;
+    .item-list{
+        font-weight: 500;
+        color: var(--color-text-strong);
+        border-bottom: 1px solid gray;
+        padding: 3px 5px;
+        display: flex;
+        justify-content: space-between;
+        &:hover{
+            background-color: #5696ff !important;
+            color: white;
+            cursor: pointer;
+        }
+    }
+}

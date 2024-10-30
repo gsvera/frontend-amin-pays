@@ -23,6 +23,7 @@ export const CustomModalConfirm = ({
       open={open}
       footer={null}
       onCancel={handleCancelAction}
+      zIndex={1009}
     >
       <div className="text-confirm">{textConfirm}</div>
       <div className="modal-confirm-buttons">
