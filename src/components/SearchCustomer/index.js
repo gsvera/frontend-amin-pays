@@ -8,7 +8,7 @@ import { setCustomer } from "@/store-redux/slide/customerSlide";
 import "./index.scss";
 import CustomList from "../Customer/CustomList";
 
-export const SearchCustomer = () => {
+export const SearchCustomer = ({ handleCleanData }) => {
   const queryClient = useQueryClient();
   const dispatch = useDispatch();
   const [valueCustomerSearch, setValueCustomerSearch] = useState();
@@ -51,6 +51,7 @@ export const SearchCustomer = () => {
     const valueSelected = listCustomer?.find((item) => item.id === value?.id);
     dispatch(setCustomer(valueSelected));
     setValueCustomerSearch("");
+    handleCleanData?.();
   };
 
   const handleClickOutside = (event) => {

@@ -15,13 +15,15 @@ import { DATE_PICKER_PROPS, formatDate } from "@/utils/DateUtils";
 import { DollarOutlined, UploadOutlined } from "@ant-design/icons";
 import { useForm, useWatch } from "antd/es/form/Form";
 import FooterModal from "@/components/FormComponent/FooterModal";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { apiPay } from "@/api/services/apiPay";
 import { useNotification } from "@/hooks/UseNotification";
 import { FORMAT_DATE, TYPES_PAY } from "@/config/constants";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import moment from "moment";
 import CustomModalConfirm from "@/components/CustomModalConfirm";
+import { setContract } from "@/store-redux/slide/contractSlide";
+import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 
 const beforeUpload = (file) => {
   const isJpgOrPng =
@@ -42,13 +44,16 @@ const beforeUpload = (file) => {
 
 export default function PayModal({ open, handleClose }) {
   const [form] = useForm();
+  const dispatch = useDispatch();
+  const queryClient = useQueryClient();
   const {
     openErrorNotification,
     openSuccessNotification,
     openInfoNotification,
   } = useNotification();
   const { dataUser } = useSelector((state) => state.userSlice);
-  const [contractSelected, setContractSelected] = useState();
+  const { dataContract } = useSelector((state) => state.contractSlice);
+
   const [payFile, setPayFile] = useState();
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
   const [wPayDate, wPayAmount] = [
@@ -92,22 +97,27 @@ export default function PayModal({ open, handleClose }) {
         openInfoNotification("Su pago fue menor a la cuota esperada.");
 
       openSuccessNotification(data?.message);
+      queryClient.invalidateQueries([
+        REACT_QUERY_KEYS.contract.getContractWithDetails(dataContract?.id),
+      ]);
     }
   };
 
   const selectContract = (item) => {
     const statusContract = getStatusContract(item?.statusContract);
-    setContractSelected({
-      ...item,
-      statusLabel: statusContract.value,
-      bgBack: statusContract.bgColor,
-      bgColor: statusContract.color,
-    });
+    dispatch(
+      setContract({
+        ...item,
+        statusLabel: statusContract.value,
+        bgBack: statusContract.bgColor,
+        bgColor: statusContract.color,
+      })
+    );
   };
 
   const handleCloseModal = () => {
     handleClose?.();
-    setContractSelected(null);
+    dispatch(setContract(undefined));
   };
 
   const handleCloseModalConfirm = () => {
@@ -161,7 +171,7 @@ export default function PayModal({ open, handleClose }) {
         payFile,
         createdNameUser: `${dataUser?.firstName} ${dataUser.lastName}`,
         idCreatedUser: dataUser?.id,
-        idContractDto: contractSelected?.id,
+        idContractDto: dataContract?.id,
         force,
       });
     } catch (Exception) {}
@@ -182,29 +192,30 @@ export default function PayModal({ open, handleClose }) {
           <Row style={{ justifyContent: "space-between", marginTop: "20px" }}>
             <div>
               <span style={{ fontWeight: "bold" }}>Folio:</span>{" "}
-              {contractSelected?.folio}
+              {dataContract?.folio}
             </div>
 
             <div>
               <span style={{ fontWeight: "bold" }}>Ultima fecha de pago: </span>
-              {contractSelected?.lastDateDidPay}
+              {dataContract?.lastDateDidPay}
             </div>
             <div>
               <span style={{ fontWeight: "bold" }}>
                 Monto de ultima cuota:{" "}
               </span>
-              {convertCurrency(contractSelected?.lastPayAmount)}
+              {dataContract?.lastPayAmount &&
+                convertCurrency(dataContract?.lastPayAmount)}
             </div>
             <div>
               <span style={{ fontWeight: "bold" }}>Estatus: </span>
               <span
                 className="badge"
                 style={{
-                  background: contractSelected?.bgBack,
-                  color: contractSelected?.bgColor,
+                  background: dataContract?.bgBack,
+                  color: dataContract?.bgColor,
                 }}
               >
-                {contractSelected?.statusLabel}
+                {dataContract?.statusLabel}
               </span>
             </div>
           </Row>
@@ -217,7 +228,7 @@ export default function PayModal({ open, handleClose }) {
               ]}
             >
               <DatePicker
-                disabled={!contractSelected}
+                disabled={!dataContract}
                 {...DATE_PICKER_PROPS.disabledDateAfterToday}
               />
             </Form.Item>
@@ -233,7 +244,7 @@ export default function PayModal({ open, handleClose }) {
                 min="0"
                 step="0.00"
                 precision={2}
-                disabled={!contractSelected}
+                disabled={!dataContract}
               />
             </Form.Item>
             <Form.Item
@@ -252,7 +263,7 @@ export default function PayModal({ open, handleClose }) {
                 <Button
                   className="btn-file"
                   icon={<UploadOutlined />}
-                  disabled={!contractSelected}
+                  disabled={!dataContract}
                 >
                   Subir archivo
                 </Button>

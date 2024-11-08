@@ -3,6 +3,7 @@ import { persistStore, persistReducer } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 import userReducer from "./slide/userSlide";
 import customerReducer from "./slide/customerSlide";
+import contractReducer from "./slide/contractSlide";
 
 const persistConfig = {
   key: "root",
@@ -15,6 +16,7 @@ const store = configureStore({
   reducer: {
     userSlice: persistedReducer,
     customerSlice: customerReducer,
+    contractSlice: contractReducer,
   },
 });
 

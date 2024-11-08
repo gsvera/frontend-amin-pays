@@ -61,6 +61,7 @@ export const FormContract = ({
   handleClose,
   onSuccessHandler,
   idToEdit,
+  handleClean,
 }) => {
   const [form] = useForm();
   const { openErrorNotification, openSuccessNotification } = useNotification();
@@ -73,31 +74,6 @@ export const FormContract = ({
     useWatch("startDate", form),
     useWatch("amount", form),
   ];
-
-  /**
-   * Para setear los valores por defecto al cargar el componente
-   */
-  useEffect(() => {
-    form.setFieldsValue(defaultData);
-  }, []);
-
-  const permissionToAddCustomer = useMemo(
-    () => hasAccess(PROFILE_PERMISSIONS.ADD_CUSTOMER),
-    [hasAccess]
-  );
-
-  const disabledCalculator = useMemo(
-    () => !wStartDate || !wAmount,
-    [wStartDate, wAmount]
-  );
-
-  const disabledSave = useMemo(
-    () =>
-      disabledCalculator ||
-      !dataAmortization?.dataAmortization ||
-      !dataCustomer?.id,
-    [disabledCalculator, dataAmortization, dataCustomer?.id]
-  );
 
   /**
    *  QUERYS
@@ -128,13 +104,39 @@ export const FormContract = ({
     },
   });
 
-  const { mutate: initContract } = useMutation({
+  const { mutate: initContract, isPending: isPendingInit } = useMutation({
     mutationFn: (data) => apiContract.initContract(data),
     onSuccess: (data) => handleSuccessContract(data),
     onError: (err) => {
       openErrorNotification(err);
     },
   });
+
+  /**
+   * Para setear los valores por defecto al cargar el componente
+   */
+  useEffect(() => {
+    form.setFieldsValue(defaultData);
+  }, []);
+
+  const permissionToAddCustomer = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.ADD_CUSTOMER),
+    [hasAccess]
+  );
+
+  const disabledCalculator = useMemo(
+    () => !wStartDate || !wAmount,
+    [wStartDate, wAmount]
+  );
+
+  const disabledSave = useMemo(
+    () =>
+      disabledCalculator ||
+      !dataAmortization?.dataAmortization ||
+      !dataCustomer?.id ||
+      isPendingInit,
+    [disabledCalculator, dataAmortization, dataCustomer?.id, isPendingInit]
+  );
 
   /**
    * EFFECTS
@@ -270,7 +272,7 @@ export const FormContract = ({
             >
               <Col style={{ marginRight: "10px" }}>
                 <div style={{ fontWeight: "bold" }}>Buscar cliente</div>
-                <SearchCustomer />
+                <SearchCustomer handleCleanData={handleClean} />
               </Col>
               {permissionToAddCustomer && (
                 <Col style={{ display: "flex", alignItems: "end" }}>
@@ -417,7 +419,10 @@ export const FormContract = ({
         </Form>
       </div>
       <div>
-        <CustomTableAmortization dataBody={dataAmortization} />
+        <CustomTableAmortization
+          dataBody={dataAmortization}
+          className="general-style-table"
+        />
       </div>
     </Modal>
   );

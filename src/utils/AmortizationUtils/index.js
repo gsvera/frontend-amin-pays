@@ -1,5 +1,10 @@
 import moment from "moment";
-import { FORMAT_DATE, INTEREST_RATE, PERIOD_DATE } from "@/config/constants";
+import {
+  AMORTIZATION,
+  FORMAT_DATE,
+  INTEREST_RATE,
+  PERIOD_DATE,
+} from "@/config/constants";
 import { CalculateAddPeriod } from "@/utils/DateUtils";
 
 export const GenerateAmericanAmortization = ({
@@ -211,7 +216,14 @@ export const GenerateFrancesAmortizacion = ({
   };
 };
 
-export default {
-  GenerateAmericanAmortization,
-  GenerateAlemanAmortizacion,
+export const GenerateTableAmortization = (
+  dataAmortization,
+  typeAmortization
+) => {
+  if (typeAmortization === AMORTIZATION.AMERICANO)
+    return GenerateAmericanAmortization({ ...dataAmortization });
+  if (typeAmortization === AMORTIZATION.ALEMAN)
+    return GenerateAlemanAmortizacion({ ...dataAmortization });
+  if (typeAmortization === AMORTIZATION.FRANCES)
+    return GenerateFrancesAmortizacion({ ...dataAmortization });
 };

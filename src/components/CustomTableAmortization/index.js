@@ -2,7 +2,7 @@ import { convertCurrency } from "@/utils/GeneralUtils";
 
 export const dataHead = [
   {
-    label: "",
+    label: "#",
     index: "key",
     type: "",
   },
@@ -33,10 +33,10 @@ export const dataHead = [
   },
 ];
 
-export const CustomTableAmortization = ({ dataBody }) => {
+export const CustomTableAmortization = ({ dataBody, className }) => {
   return (
     <div>
-      <table style={{ width: "100%" }}>
+      <table style={{ width: "100%" }} className={className}>
         <thead>
           <tr>
             {dataHead &&
@@ -65,17 +65,17 @@ export const CustomTableAmortization = ({ dataBody }) => {
             })}
 
           {dataBody && (
-            <tr>
+            <tr className="footer-table">
               <td></td>
-              <td style={{ fontWeight: "bold" }}>Totales:</td>
-              <td style={{ textAlign: "center", fontWeight: "bold" }}>
+              <td className="text-center bold-6">Totales:</td>
+              <td className="text-center bold-6">
                 {dataBody?.totalPay && convertCurrency(dataBody.totalPay)}
               </td>
-              <td style={{ textAlign: "center", fontWeight: "bold" }}>
+              <td className="text-center bold-6">
                 {dataBody?.totalInterest &&
                   convertCurrency(dataBody.totalInterest)}
               </td>
-              <td style={{ textAlign: "center", fontWeight: "bold" }}>
+              <td className="text-center bold-6">
                 {dataBody?.totalAmortization &&
                   convertCurrency(dataBody.totalAmortization)}
               </td>

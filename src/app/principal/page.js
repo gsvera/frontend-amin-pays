@@ -35,6 +35,10 @@ export default function Principal() {
     setComponenteModal(null);
   };
 
+  const handleModalComponente = (component) => {
+    setModalPay(component);
+  };
+
   if (!token) {
     router.push("/login");
     return (
@@ -61,7 +65,9 @@ export default function Principal() {
             </div>
           )}
           {component === MODULES.MODULE_CUSTOMER && <Customer />}
-          {component === MODULES.MODULE_CONTRACTS && <Contracts />}
+          {component === MODULES.MODULE_CONTRACTS && (
+            <Contracts handlePrincipalModal={handleModalComponente} />
+          )}
           <PayModal open={modalPay} handleClose={handleClosePay} />
         </div>
       </div>

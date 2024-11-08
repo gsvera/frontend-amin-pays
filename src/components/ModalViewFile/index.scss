@@ -1,0 +1,15 @@
+.modal-view-pdf{
+    width: 70% !important;
+    top:20px !important;
+    .ant-modal-content {
+        width: 100%;
+        height: 90vh;
+        top: 20px;
+        .ant-modal-body {
+            margin-top: 20px;
+        }
+    }
+}
+.modal-view-img{
+    top: 20px !important;
+}

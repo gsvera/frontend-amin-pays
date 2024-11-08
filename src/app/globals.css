@@ -20,6 +20,10 @@
   --color-text-strong: black;
   --color-text-strong-inverter: white;
   --color-text-secondary: #b1b1b1 ;
+  
+  
+  --table-bg-gray: #C6C8CA;
+  --table-bg-secondary:#D6D8DB;
 
   --color-row-select: #5696ff;
 }
@@ -176,6 +180,9 @@ a {
 .bold{
   font-weight: bold;
 }
+.bold-6{
+  font-weight: 600;
+}
 .badge{
   border-radius: 3px;
   padding: 2px 4px 3px;
@@ -187,4 +194,7 @@ a {
 }
 .ml-1{
   margin-left: 10px;
+}
+.text-center {
+  text-align: center;
 }

@@ -1,0 +1,65 @@
+.detail-contract{
+    height: 100%;
+    .detail-body{
+        height: 90%;
+        overflow-y: auto;
+    }
+    .head-buttons{
+        button {
+            margin-left: 10px;
+            .icon{
+                font-size: 21px;
+            }
+        }
+    }
+    .title-info{
+        width: 100%;
+        text-align: center;
+        font-weight: bold;
+        font-size: 17px;
+        margin: 5px 0;
+    }
+    .head-detail-contract{
+        justify-content: space-between;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 10px;
+        .content-info{
+            width: 48%;
+            padding: 10px;
+            background: white;
+            .ant-row{
+                justify-content: space-between;
+                margin-top: 7px;
+            }
+        }
+    }
+    .head-table-pays{
+        width: 100%;
+        overflow-y: auto;
+        .head-table-pays-card{
+            background: white;    
+            margin: 10px 0;
+            padding: 10px 0;
+        }
+        .table-detail{
+            width: 100%;
+            margin-top: 15px;
+            tbody{
+                tr {
+                    height: 25px;
+                    > td > div {
+                        text-align: center;
+                    }
+
+                } 
+            }
+        }
+    }
+}
+.loading{
+    height: 100% !important;
+    justify-content: center !important;
+    align-items: center !important;
+    display: flex !important;
+}

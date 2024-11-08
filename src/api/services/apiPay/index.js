@@ -9,4 +9,9 @@ export const apiPay = {
       data
     );
   },
+  deletePay: function (data) {
+    return axiosInstance.post(
+      `${BASE_URL}/delete-pay?id-pay=${data?.idPay}&id-contract=${data?.idContract}`
+    );
+  },
 };

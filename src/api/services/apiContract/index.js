@@ -16,6 +16,11 @@ export const apiContract = {
       `${BASE_URL}/get-by-customer-contract?word=${word}`
     );
   },
+  getContractWithDetail: function (idContract) {
+    return axiosInstance.get(
+      `${BASE_URL}/get-contract-with-pays?id=${idContract}`
+    );
+  },
   save: function (data) {
     return axiosInstance.post(`${BASE_URL}/save`, data);
   },

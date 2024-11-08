@@ -25,6 +25,11 @@ const MenuAdminPay = ({ changeModule, openModuleModal }) => {
     () => hasAccess(PROFILE_PERMISSIONS.MODULE_CONTRACTS),
     [hasAccess]
   );
+  const canAddPayModule = useMemo(
+    () => hasAccess(PROFILE_PERMISSIONS.ADD_PAYS),
+    [hasAccess]
+  );
+
   const handleMenuModule = (module) => {
     changeModule?.(module);
   };
@@ -76,16 +81,18 @@ const MenuAdminPay = ({ changeModule, openModuleModal }) => {
             </div>
           </Col>
         )}
-        <Col>
-          <div
-            className="element-menu"
-            onClick={(e) => handleMenuModuleModal(MODULES_MODALS.MODAL_PAY)}
-          >
-            <Tooltip title="Pagos" placement="right">
-              <AuditOutlined className="icon-menu-principal" />
-            </Tooltip>
-          </div>
-        </Col>
+        {canAddPayModule && (
+          <Col>
+            <div
+              className="element-menu"
+              onClick={(e) => handleMenuModuleModal(MODULES_MODALS.MODAL_PAY)}
+            >
+              <Tooltip title="Pagos" placement="right">
+                <AuditOutlined className="icon-menu-principal" />
+              </Tooltip>
+            </div>
+          </Col>
+        )}
       </Col>
     </div>
   );

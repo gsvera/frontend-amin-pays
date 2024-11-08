@@ -142,6 +142,13 @@ export const ARRAY_STATUS_CONTRACT:object[] = [
     }
 ];
 
+export enum TYPES_PAY {
+    PAY_LESS_TO_AMOUNT = 1,
+    PAY_EQUAL_TO_AMOUNT = 2,
+    PAY_MORE_TO_AMOUNT = 3,
+    PAY_MORE_TO_AMOUNT_BUT_DEVENGADO = 4
+}
+
 export enum PROFILE_PERMISSIONS {
     /** Permite poder editar los clientes */
     EDIT_CUSTOMER = 1,
@@ -162,12 +169,7 @@ export enum PROFILE_PERMISSIONS {
     /** Permiso para eliminar contratos */
     DELETE_CONTRACTS = 9,
     /** Permiso para agregar pagos */
-    ADD_PAYS = 10
-}
-
-export enum TYPES_PAY {
-    PAY_LESS_TO_AMOUNT = 1,
-    PAY_EQUAL_TO_AMOUNT = 2,
-    PAY_MORE_TO_AMOUNT = 3,
-    PAY_MORE_TO_AMOUNT_BUT_DEVENGADO = 4
+    ADD_PAYS = 10,
+    /** Permiso para eliminar pagos */
+    DELETE_PAYS = 11
 }

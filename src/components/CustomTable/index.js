@@ -17,9 +17,14 @@ export const CustomTable = ({ dataHead = [], dataBody = [], tableClass }) => {
       <thead>
         {dataHead.length > 0 && (
           <tr>
-            {dataHead.map((item, index) => (
-              <th key={index}>{item?.label}</th>
-            ))}
+            {dataHead.map(
+              (item, index) =>
+                !item?.hidden && (
+                  <th key={index} style={{ width: item?.width ?? "auto" }}>
+                    {item?.label}
+                  </th>
+                )
+            )}
           </tr>
         )}
       </thead>
@@ -27,11 +32,14 @@ export const CustomTable = ({ dataHead = [], dataBody = [], tableClass }) => {
         {tableData?.length > 0 ? (
           tableData.map((item, index) => (
             <tr key={index}>
-              {dataHead.map((column) => (
-                <td key={item.id}>
-                  {column?.render(item[column?.index], item)}
-                </td>
-              ))}
+              {dataHead.map(
+                (column) =>
+                  !column?.hidden && (
+                    <td key={item.id}>
+                      {column?.render(item[column?.index], item, index)}
+                    </td>
+                  )
+              )}
             </tr>
           ))
         ) : (

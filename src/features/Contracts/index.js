@@ -17,6 +17,7 @@ import { convertCurrency, getStatusContract } from "@/utils/GeneralUtils";
 import CustomTable from "@/components/CustomTable";
 import {
   FORMAT_DATE,
+  MODULES_MODALS,
   PROFILE_PERMISSIONS,
   STATUS_CONTRACT,
 } from "@/config/constants";
@@ -26,8 +27,9 @@ import CustomModalConfirm from "@/components/CustomModalConfirm";
 import { useNotification } from "@/hooks/UseNotification";
 import { HasAccessPermission } from "@/hooks/HasAccessPermission";
 import SearchCustomer from "@/components/SearchCustomer";
+import DetailContract from "./DetailContract";
 
-export default function Contracts() {
+export default function Contracts({ handlePrincipalModal }) {
   const dispatch = useDispatch();
   const { dataCustomer } = useSelector((state) => state.customerSlice);
   const { openSuccessNotification, openErrorNotification } = useNotification();
@@ -97,7 +99,7 @@ export default function Contracts() {
                 </Tooltip>
               </>
             ) : (
-              <Tooltip title="Ver contrato">
+              <Tooltip title="Ver detalle">
                 <EyeOutlined
                   className="icon-size-17"
                   onClick={(e) => handleViewDetail(item?.id)}
@@ -151,6 +153,7 @@ export default function Contracts() {
   const cleanSeleccionCustomer = () => {
     dispatch(cleanSelection());
     setIdContractSelected(null);
+    setIdContractView(undefined);
   };
 
   const handleOpenDeleteModal = (id) => {
@@ -176,12 +179,16 @@ export default function Contracts() {
     setOpenModalContract(true);
   };
 
+  const handleModalPay = () => {
+    handlePrincipalModal?.(MODULES_MODALS.MODAL_PAY);
+  };
+
   return (
     <div className="content-module">
       <Row>
         <Row style={{ justifyContent: "space-between", width: "100%" }}>
           <Row>
-            <SearchCustomer />
+            <SearchCustomer handleCleanData={handleViewDetail} />
             <Button
               style={{ marginLeft: "10px" }}
               text={
@@ -227,13 +234,19 @@ export default function Contracts() {
             </Col>
           </Row>
         </Col>
-        <Col span={15}>{idContractView}</Col>
+        <Col span={15} style={{ height: "100%" }}>
+          <DetailContract
+            idContract={idContractView}
+            handleModalPay={handleModalPay}
+          />
+        </Col>
       </div>
       <FormContract
         open={openModalContract}
         handleClose={handleOpenModalContrat}
         onSuccessHandler={refetchContracts}
         idToEdit={idContractSelected}
+        handleClean={handleViewDetail}
       />
       <CustomModalConfirm
         open={openModalDelete}
