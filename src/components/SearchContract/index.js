@@ -13,7 +13,7 @@ export const SearchContract = ({ handleSelectContract }) => {
 
   const { data: listContract = [], isLoading } = useQuery({
     queryKey: [REACT_QUERY_KEYS.contract.getByCustomerContract("pay-contract")],
-    queryFn: () => apiContract.getByCustomerContract(valueContractSearch),
+    queryFn: () => apiContract.getByCustomerContractActive(valueContractSearch),
     ...{
       select: (data) => data?.data?.items,
     },

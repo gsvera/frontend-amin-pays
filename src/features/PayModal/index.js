@@ -56,6 +56,7 @@ export default function PayModal({ open, handleClose }) {
 
   const [payFile, setPayFile] = useState();
   const [openConfirmModal, setOpenConfirmModal] = useState(false);
+  const [payDateForm, setPayDateForm] = useState();
   const [wPayDate, wPayAmount] = [
     useWatch("payDate", form),
     useWatch("payAmount", form),
@@ -153,21 +154,22 @@ export default function PayModal({ open, handleClose }) {
     setOpenConfirmModal(false);
   };
 
+  const onChangeDate = (date, dateString) => {
+    setPayDateForm(dateString);
+  };
+
   const handleSubmitPay = async (force = false) => {
     try {
       await form.validateFields();
 
-      const payDate = formatDate(
-        form.getFieldValue("payDate"),
-        FORMAT_DATE.EN_FORMAT_DATE
-      );
+      const payDate = formatDate(payDateForm, FORMAT_DATE.ES_FORMAT_DATE);
       // Se deja asi por el momento pero este campo tendria que ser la fecha que aparece en el vourcher de pago
-      const payDidDate = formatDate(moment(), FORMAT_DATE.EN_FORMAT_DATE);
+      const payDidDate = formatDate(moment(), FORMAT_DATE.ES_FORMAT_DATE);
 
       savePay({
         ...form.getFieldsValue(),
         payDate,
-        payDidDate,
+        payDidDate: payDate,
         payFile,
         createdNameUser: `${dataUser?.firstName} ${dataUser.lastName}`,
         idCreatedUser: dataUser?.id,
@@ -229,6 +231,7 @@ export default function PayModal({ open, handleClose }) {
             >
               <DatePicker
                 disabled={!dataContract}
+                onChange={onChangeDate}
                 {...DATE_PICKER_PROPS.disabledDateAfterToday}
               />
             </Form.Item>

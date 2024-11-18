@@ -29,7 +29,7 @@ export const ModalViewFile = ({ open, file, handleClose }) => {
       open={open}
       onCancel={handleCloseModal}
       closable
-      className={filePdf ? "modal-view-pdf" : "modal-view-img`"}
+      className={filePdf ? "modal-view-pdf" : "modal-view-img"}
       footer={null}
     >
       {filePdf && (

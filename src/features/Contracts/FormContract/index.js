@@ -47,6 +47,7 @@ import moment from "moment";
 import { REACT_QUERY_KEYS } from "@/config/react-query-keys";
 import dayjs from "dayjs";
 import { HasAccessPermission } from "@/hooks/HasAccessPermission";
+import { apiProduct } from "@/api/services/apiProduct";
 
 const defaultData = {
   typeAmortization: AMORTIZATION.FRANCES,
@@ -70,9 +71,10 @@ export const FormContract = ({
   const { dataUser } = useSelector((state) => state.userSlice);
   const [dataAmortization, setDataAmortization] = useState([]);
   const [startDate, setStartDate] = useState();
-  const [wStartDate, wAmount] = [
+  const [wStartDate, wAmount, wProduct] = [
     useWatch("startDate", form),
     useWatch("amount", form),
+    useWatch("product", form),
   ];
 
   /**
@@ -86,6 +88,21 @@ export const FormContract = ({
       select: (data) => data?.data?.items,
     },
     enabled: !!idToEdit,
+  });
+
+  const { data: products = [] } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.product.getAll("contracts")],
+    queryFn: () => apiProduct.getAllProducts(),
+    ...{
+      select: (data) => {
+        return data?.data?.items
+          ? data?.data?.items?.map((item) => ({
+              value: item?.id,
+              label: item?.productName,
+            }))
+          : [];
+      },
+    },
   });
 
   const { mutate: saveContract } = useMutation({
@@ -134,8 +151,15 @@ export const FormContract = ({
       disabledCalculator ||
       !dataAmortization?.dataAmortization ||
       !dataCustomer?.id ||
+      !wProduct ||
       isPendingInit,
-    [disabledCalculator, dataAmortization, dataCustomer?.id, isPendingInit]
+    [
+      disabledCalculator,
+      dataAmortization,
+      dataCustomer?.id,
+      isPendingInit,
+      wProduct,
+    ]
   );
 
   /**
@@ -146,6 +170,7 @@ export const FormContract = ({
       form.setFieldsValue({
         ...entityToEdit,
         periodNum: entityToEdit?.numberPeriod,
+        product: entityToEdit?.idProduct,
         startDate: "",
       });
       setTimeout(() => {
@@ -251,6 +276,7 @@ export const FormContract = ({
       idCustomer: dataCustomer?.id,
       idCreatedUser: dataUser?.id,
       statusContract: draft ? STATUS_CONTRACT.BORRADOR : STATUS_CONTRACT.ACTIVO,
+      idProduct: form.getFieldValue("product"),
       listPay,
     };
   }
@@ -294,6 +320,22 @@ export const FormContract = ({
             )}
           </Row>
           <hr style={{ marginBottom: "10px" }} />
+          <Row className="group-inputs-contract">
+            <Col span={5}>
+              <Form.Item
+                label="Producto"
+                name="product"
+                rules={[
+                  {
+                    required: true,
+                    message: "Campo obligatorio",
+                  },
+                ]}
+              >
+                <Select options={products} />
+              </Form.Item>
+            </Col>
+          </Row>
           <Row className="group-inputs-contract">
             <Col span={4}>
               <Form.Item

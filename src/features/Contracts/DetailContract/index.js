@@ -30,6 +30,7 @@ import CustomAntEmpty from "@/components/CustomAntEmpty";
 import CustomModalConfirm from "@/components/CustomModalConfirm";
 import { apiPay } from "@/api/services/apiPay";
 import { useNotification } from "@/hooks/UseNotification";
+import { apiProduct } from "@/api/services/apiProduct";
 
 export const DetailContract = ({ idContract, handleModalPay = {} }) => {
   const dispatch = useDispatch();
@@ -68,6 +69,14 @@ export const DetailContract = ({ idContract, handleModalPay = {} }) => {
     enabled: !!idContract,
   });
 
+  const { data: products = [] } = useQuery({
+    queryKey: [REACT_QUERY_KEYS.product.getAll("contracts")],
+    queryFn: () => apiProduct.getAllProducts(),
+    ...{
+      select: (data) => data?.data?.items,
+    },
+  });
+
   const { mutate: deletePay } = useMutation({
     mutationFn: (data) => apiPay.deletePay(data),
     onSuccess: (data) => handleSuccessPay(data?.data),
@@ -85,6 +94,11 @@ export const DetailContract = ({ idContract, handleModalPay = {} }) => {
   /**
    * USE MEMOS
    */
+  const contractProduct = useMemo(
+    () => products?.find((item) => item?.id === dataContract?.idProduct),
+    [products, dataContract]
+  );
+
   const showButtonPay = useMemo(
     () =>
       canAddPayModule &&
@@ -200,14 +214,14 @@ export const DetailContract = ({ idContract, handleModalPay = {} }) => {
       render: (row) => <div>{row}</div>,
     },
     {
-      index: "payDidDate",
-      label: "Fecha de pago",
-      render: (row) => <div>{row}</div>,
-    },
-    {
       index: "agreedPay",
       label: "Monto a pagar",
       render: (row) => <div>{convertCurrency(row)}</div>,
+    },
+    {
+      index: "payDidDate",
+      label: "Fecha de pago",
+      render: (row) => <div>{row}</div>,
     },
     {
       index: "payAmount",
@@ -316,7 +330,11 @@ export const DetailContract = ({ idContract, handleModalPay = {} }) => {
                   <div>{dataContract?.endDate}</div>
                 </Row>
                 <Row>
-                  <div className="bold-6">Tipo de producto:</div>
+                  <div className="bold-6">Producto</div>
+                  <div>{contractProduct?.productName}</div>
+                </Row>
+                <Row>
+                  <div className="bold-6">Tipo de amortización:</div>
                   <div>{dataContract?.typeAmortization}</div>
                 </Row>
                 <Row>

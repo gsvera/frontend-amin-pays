@@ -29,11 +29,11 @@ export const ButtonAddCustomer = ({
               className="icon-size-17"
               style={{ marginRight: "5px" }}
             />{" "}
-            Agregar
+            Agregar Cliente
           </div>
         }
         className="btn-add"
-        style={{ width: "100px" }}
+        style={{ width: "150px" }}
         onClick={(e) => setOpenModal(true)}
       />
       <FormCustomer

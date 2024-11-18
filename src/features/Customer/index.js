@@ -1,14 +1,8 @@
-import { Table, Row, Tooltip, Input, Col } from "antd";
+import { Table, Row, Tooltip, Col } from "antd";
 import { useEffect, useMemo, useState } from "react";
 import Button from "@/components/Button";
-import {
-  UserAddOutlined,
-  PhoneOutlined,
-  MailOutlined,
-  SyncOutlined,
-} from "@ant-design/icons";
+import { PhoneOutlined, MailOutlined, SyncOutlined } from "@ant-design/icons";
 import "./index.scss";
-import FormCustomer from "./FormCustomer";
 import {
   defaultPageParams,
   pageSizeOptions,
@@ -21,12 +15,12 @@ import { EditIcon } from "@/components/Icons/EditIcon";
 import { DeleteOutlined, WhatsAppOutlined } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import DelaySearcher from "@/components/DelaySearcher";
-import ConfirmSimpleModal from "@/components/ConfirmSimpleModal";
 import { useNotification } from "@/hooks/UseNotification";
 import { openWindow } from "@/utils/GeneralUtils";
 import CustomerNote from "./CustomerNote";
 import ButtonAddCustomer from "./ButtonAddCustomer";
 import { HasAccessPermission } from "@/hooks/HasAccessPermission";
+import CustomModalConfirm from "@/components/CustomModalConfirm";
 
 export default function Customer() {
   const { openErrorNotification, openSuccessNotification } = useNotification();
@@ -419,10 +413,11 @@ export default function Customer() {
           <CustomerNote customer={rowSelected} user={dataUser} />
         </Col>
       </div>
-      <ConfirmSimpleModal
+      <CustomModalConfirm
         open={openDeleteModal}
-        classN={"confirm-simple-modal"}
-        message={
+        handleClose={closeDeleteModal}
+        onSuccessHandle={handleDeleteCustomer}
+        textConfirm={
           <div>
             Estas seguro de eliminar al cliente{" "}
             <span style={{ fontWeight: "bold" }}>
@@ -430,9 +425,6 @@ export default function Customer() {
             </span>
           </div>
         }
-        onCancel={closeDeleteModal}
-        onSuccess={handleDeleteCustomer}
-        btnAcceptClassName={"btn-danger"}
       />
     </div>
   );

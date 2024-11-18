@@ -16,4 +16,7 @@ export const REACT_QUERY_KEYS = {
     getById: (key) => `get-contract-by-id-${key}`,
     getContractWithDetails: (key) => `get-contract-with-detail-${key}`,
   },
+  product: {
+    getAll: (key) => `get-all-product-${key}`,
+  },
 };

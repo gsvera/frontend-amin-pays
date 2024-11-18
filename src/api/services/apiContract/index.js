@@ -11,9 +11,9 @@ export const apiContract = {
   getById: function (idContract) {
     return axiosInstance.get(`${BASE_URL}/get-by-id?id-contract=${idContract}`);
   },
-  getByCustomerContract: function (word) {
+  getByCustomerContractActive: function (word) {
     return axiosInstance.get(
-      `${BASE_URL}/get-by-customer-contract?word=${word}`
+      `${BASE_URL}/get-by-customer/contract-active?word=${word}`
     );
   },
   getContractWithDetail: function (idContract) {

@@ -1,5 +1,5 @@
 import { Col, Row, Tooltip } from "antd";
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Button from "@/components/Button";
 import {
   FileAddOutlined,
@@ -28,6 +28,7 @@ import { useNotification } from "@/hooks/UseNotification";
 import { HasAccessPermission } from "@/hooks/HasAccessPermission";
 import SearchCustomer from "@/components/SearchCustomer";
 import DetailContract from "./DetailContract";
+import { setCustomer } from "@/store-redux/slide/customerSlide";
 
 export default function Contracts({ handlePrincipalModal }) {
   const dispatch = useDispatch();
@@ -38,6 +39,10 @@ export default function Contracts({ handlePrincipalModal }) {
   const [openModalDelete, setOpenModalDelete] = useState(false);
   const [idContractSelected, setIdContractSelected] = useState();
   const [idContractView, setIdContractView] = useState();
+
+  useEffect(() => {
+    dispatch(setCustomer(null));
+  }, []);
 
   const canAddContract = useMemo(
     () => hasAccess(PROFILE_PERMISSIONS.ADD_CONTRACTS),
